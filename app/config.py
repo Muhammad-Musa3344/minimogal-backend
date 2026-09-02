@@ -18,3 +18,4 @@ UPSTASH_REDIS_REST_TOKEN = os.getenv("UPSTASH_REDIS_REST_TOKEN", "")
 
 RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
 RESEND_FROM_EMAIL = os.getenv("RESEND_FROM_EMAIL", "hello@mogulmind.app")
+DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "")

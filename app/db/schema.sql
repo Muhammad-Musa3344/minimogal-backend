@@ -37,3 +37,11 @@ create table if not exists answer_bank (
   created_at timestamptz not null default now(),
   unique (touchpoint, input_state_hash)
 );
+create table if not exists decision_log (
+  id uuid primary key default gen_random_uuid(),
+  playthrough_id uuid not null references playthroughs(id) on delete cascade,
+  screen_id text not null,
+  decision_key text not null,
+  decision_value jsonb not null,
+  created_at timestamptz not null default now()
+);

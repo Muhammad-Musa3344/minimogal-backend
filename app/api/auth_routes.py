@@ -32,3 +32,19 @@ def signin(payload: SigninRequest):
     if result.session is None:
         raise HTTPException(status_code=401, detail="Invalid credentials")
     return {"access_token": result.session.access_token, "user_id": result.user.id}
+@router.post("/google")
+def google_signin(id_token: str):
+    result = supabase.auth.sign_in_with_id_token({"provider": "google", "token": id_token})
+    if result.session is None:
+        raise HTTPException(status_code=401, detail="Google sign-in failed")
+
+    existing = supabase.table("accounts").select("id").eq("id", result.user.id).execute()
+    if not existing.data:
+        supabase.table("accounts").insert({
+            "id": result.user.id,
+            "email": result.user.email,
+            "auth_provider": "google",
+            "email_verified": True,
+        }).execute()
+
+    return {"access_token": result.session.access_token, "user_id": result.user.id}
