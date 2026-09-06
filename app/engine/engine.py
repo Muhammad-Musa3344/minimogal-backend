@@ -7,6 +7,7 @@ from app.engine.simulation import (
     calculate_profit,
     get_vignette_customer_indices,
     get_difficulty_event_index,
+    get_advertising_cost
 )
 
 def run_engine(
@@ -24,14 +25,12 @@ def run_engine(
     seed = generate_seed(avatar_id, playthrough_index)
     total_cost = calculate_total_cost(quantity, flavors, sourcing_method, level)
     price = resolve_price(price_slot, level)
-
     base_traffic = get_base_traffic(location, level)
     effective_traffic = calculate_effective_traffic(location, time_weather, advertising, level)
-
+    advertising_cost = get_advertising_cost(advertising, level)
     units_sold = calculate_units_sold(effective_traffic, price_slot, quantity, level)
     revenue = calculate_revenue(units_sold, price)
-    profit = calculate_profit(revenue, total_cost)
-
+    profit = calculate_profit(revenue, total_cost, advertising_cost)
     return {
         "seed": seed,
         "level": level,

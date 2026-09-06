@@ -8,8 +8,8 @@ def calculate_units_sold(effective_traffic: int, price_slot: int, quantity_avail
 def calculate_revenue(units_sold: int, price_cents: int) -> int:
     return units_sold * price_cents
 
-def calculate_profit(revenue_cents: int, total_cost_cents: int) -> int:
-    return revenue_cents - total_cost_cents
+def calculate_profit(revenue_cents: int, total_cost_cents: int, advertising_cost_amt: int) -> int:
+    return revenue_cents - total_cost_cents - advertising_cost_amt
 
 def get_vignette_customer_indices(quantity: int, level: int) -> list:
     count = get_level_constants(level)["vignette_customer_count"]
@@ -18,3 +18,7 @@ def get_vignette_customer_indices(quantity: int, level: int) -> list:
 
 def get_difficulty_event_index(level: int) -> int:
     return get_level_constants(level)["difficulty_event_trigger_index"]
+
+
+def get_advertising_cost(advertising: str, level: int) -> int:
+    return get_level_constants(level)["advertising"][advertising]["cost_cents"]
