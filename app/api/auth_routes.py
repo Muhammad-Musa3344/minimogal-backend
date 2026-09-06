@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, EmailStr
 from app.db.supabase_client import supabase
+from app.services.email_service import send_magic_link_email
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
@@ -18,6 +19,8 @@ def signup(payload: SignupRequest):
     result = supabase.auth.sign_up({"email": payload.email, "password": payload.password})
     if result.user is None:
         raise HTTPException(status_code=400, detail="Signup failed")
+
+    send_magic_link_email(payload.email)
     supabase.table("accounts").insert({
         "id": result.user.id,
         "email": payload.email,
