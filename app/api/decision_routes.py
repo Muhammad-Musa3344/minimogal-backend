@@ -4,7 +4,6 @@ from app.db.supabase_client import supabase
 from app.middleware.auth import require_auth
 from typing import Any
 
-
 router = APIRouter(prefix="/api/decisions", tags=["decisions"])
 
 class Decision(BaseModel):
@@ -20,7 +19,7 @@ class SetAllDecisionsRequest(BaseModel):
     
 
 @router.post("/set-decision")
-def set_decision(payload: Decision):
+def set_decision(payload: Decision, account_id:str= Depends(require_auth)):
     decision = payload.model_dump()
     try:
         result = (supabase.table("decision_log")
@@ -39,7 +38,7 @@ def set_decision(payload: Decision):
 
 
 @router.post("/set-all-decisions")
-def set_all_decisions(payload: SetAllDecisionsRequest):
+def set_decision(payload: SetAllDecisionsRequest, account_id:str= Depends(require_auth)):
     decisions = [decision.model_dump() for decision in  payload.decisions]
     try:
         results = (supabase.table("decision_log")
@@ -61,7 +60,7 @@ def set_all_decisions(payload: SetAllDecisionsRequest):
 
 
 @router.get("/get-decision/{kid_session_id}/{decision_key}")
-def get_decisions(kid_session_id:str, decision_key:str):
+def get_decisions(kid_session_id:str, decision_key:str, account_id:str = Depends(require_auth)):
     try:
         result = (supabase.table("decision_log")
                     .select("*")
@@ -83,7 +82,7 @@ def get_decisions(kid_session_id:str, decision_key:str):
 
 
 @router.get("/get-all-decisions/{kid_session_id}")
-def get_all_decisions(kid_session_id:str):
+def get_all_decisions(kid_session_id:str, account_id:str=Depends(require_auth)):
     try:
         result = (supabase.table("decision_log")
                     .select("*")
