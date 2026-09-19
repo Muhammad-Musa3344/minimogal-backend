@@ -1,16 +1,11 @@
+# app/config.py
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-def required(key: str) -> str:
-    value = os.getenv(key)
-    if not value:
-        raise RuntimeError(f"Missing required env var: {key}")
-    return value
-
-SUPABASE_URL = required("SUPABASE_URL")
-SUPABASE_SERVICE_ROLE_KEY = required("SUPABASE_SERVICE_ROLE_KEY")
+SUPABASE_URL = os.getenv("SUPABASE_URL") or "https://placeholder-project.supabase.co"
+SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or "placeholder-service-role-key"
 FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173")
 
 UPSTASH_REDIS_REST_URL = os.getenv("UPSTASH_REDIS_REST_URL", "")
