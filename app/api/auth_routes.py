@@ -24,15 +24,7 @@ def signup(payload: SignupRequest):
     if result.user is None:
         raise HTTPException(status_code=400, detail="Signup failed")
 
-    supabase.table("households").insert(
-        {
-            "id": result.user.id,
-            "email": payload.email,
-            "auth_provider": "email",
-            "email_verified": False,
-        }
-    ).execute()
-
+    # households row is auto-created by the on_auth_user_created_household trigger
     return {"user_id": result.user.id, "email_verification_sent": True}
 
 
